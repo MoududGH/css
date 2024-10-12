@@ -1,0 +1,93 @@
+<div className="p-4 max-w-4xl mx-auto bg-gray-100">
+  {/* Header */}
+  <h1 className="text-3xl font-bold mb-4 text-center text-blue-600">
+    تحدي اللياقة لمدة 90 يومًا
+  </h1>
+
+  {/* Day Navigation */}
+  <div className="mb-4 text-center">
+    <button 
+      onClick={() => setCurrentDay(prev => Math.max(1, prev - 1))} 
+      className="bg-blue-500 text-white px-4 py-2 rounded mr-2 hover:bg-blue-600 transition"
+    >
+      اليوم السابق
+    </button>
+    <span className="text-xl font-bold">اليوم {currentDay} - الأسبوع {getCurrentWeek() + 1}</span>
+    <button 
+      onClick={() => setCurrentDay(prev => Math.min(90, prev + 1))} 
+      className="bg-blue-500 text-white px-4 py-2 rounded ml-2 hover:bg-blue-600 transition"
+    >
+      اليوم التالي
+    </button>
+  </div>
+
+  {/* Motivational Quote */}
+  <div className="bg-yellow-100 p-4 rounded-lg mb-4 text-center">
+    <p className="text-lg font-semibold">{getMotivationalQuote()}</p>
+  </div>
+
+  {/* Energy Level Selector */}
+  <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+    <h2 className="text-2xl font-bold mb-4 text-blue-600">مستوى الطاقة اليوم</h2>
+    <div className="flex justify-between">
+      <button 
+        onClick={() => setEnergyLevel('low')} 
+        className={`px-4 py-2 rounded transition ${energyLevel === 'low' ? 'bg-red-500 text-white' : 'bg-gray-200 hover:bg-red-200'}`}
+      >
+        منخفض
+      </button>
+      <button 
+        onClick={() => setEnergyLevel('medium')} 
+        className={`px-4 py-2 rounded transition ${energyLevel === 'medium' ? 'bg-yellow-500 text-white' : 'bg-gray-200 hover:bg-yellow-200'}`}
+      >
+        متوسط
+      </button>
+      <button 
+        onClick={() => setEnergyLevel('high')} 
+        className={`px-4 py-2 rounded transition ${energyLevel === 'high' ? 'bg-green-500 text-white' : 'bg-gray-200 hover:bg-green-200'}`}
+      >
+        مرتفع
+      </button>
+    </div>
+  </div>
+
+  {/* Daily Tasks */}
+  <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+    <h2 className="text-2xl font-bold mb-4 text-blue-600">مهام اليوم</h2>
+    <ul>
+      {getTodaysTasks().map((task, index) => (
+        <li key={index} className="flex items-center mb-2">
+          {completedTasks[currentDay]?.[task] ? (
+            <CheckCircle className="text-green-500 mr-2 cursor-pointer" onClick={() => handleTaskToggle(task)} />
+          ) : (
+            <Circle className="text-gray-300 mr-2 cursor-pointer" onClick={() => handleTaskToggle(task)} />
+          )}
+          <span>{task}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* BodyNow Section */}
+  <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+    <h2 className="text-2xl font-bold mb-4 text-blue-600">جسمك الآن</h2>
+    <p className="text-gray-700">{getBodyNowText()}</p>
+  </div>
+
+  {/* Daily Statistics */}
+  <div className="bg-white shadow-md rounded-lg p-6 mb-4">
+    <h2 className="text-2xl font-bold mb-4 text-blue-600">إحصائيات اليوم</h2>
+    <div className="flex items-center mb-2">
+      <BarChart className="mr-2 text-blue-500" /> 
+      <span>نسبة إكمال المهام: {getCompletionPercentage()}%</span>
+    </div>
+    <div className="flex items-center mb-2">
+      <Activity className="mr-2 text-green-500" /> 
+      <span>مستوى النشاط: {energyLevel === 'low' ? 'منخفض' : energyLevel === 'medium' ? 'متوسط' : 'مرتفع'}</span>
+    </div>
+    <div className="flex items-center">
+      <Droplet className="mr-2 text-blue-500" /> 
+      <span>هدف شرب الماء: {weeklyPrograms[getCurrentWeek()].habits.find(h => h.includes('ماء'))}</span>
+    </div>
+  </div>
+</div>
